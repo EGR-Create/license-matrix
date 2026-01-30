@@ -1,563 +1,469 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta http-equiv="Content-Style-Type" content="text/css">
-  <title></title>
-  <meta name="Generator" content="Cocoa HTML Writer">
-  <meta name="CocoaVersion" content="2685.3">
-  <style type="text/css">
-    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; -webkit-text-stroke: #000000}
-    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.0px Courier; -webkit-text-stroke: #000000; min-height: 16.0px}
-    span.s1 {font-kerning: none}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>License Decision Matrix</title>
+  <meta name="description" content="Decision matrix to determine Business (desktop) vs. Basic/Web licenses." />
+  <style>
+    :root{
+      --bg:#0f1420;
+      --card:#0b1020;
+      --accent:#61affe;
+      --accentSoft:#9bd1ff;
+      --danger:#ff6b6b;
+      --ok:#22c55e;
+      --muted:#98a2b3;
+      --ink:#e6edf3;
+      --inkDim:#c7d2e0;
+      --ring: 0 0 0 2px rgba(97,175,254,.35);
+      --shadow: 0 10px 25px rgba(0,0,0,.35);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin:0; padding:0;
+      background: radial-gradient(1200px 800px at 10% -10%, #162035, transparent 60%),
+                  radial-gradient(900px 700px at 110% 10%, #102132, transparent 50%),
+                  var(--bg);
+      color: var(--ink);
+      font: 16px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Segoe UI", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+      min-height:100%;
+    }
+
+    header{
+      display:flex; align-items:center; justify-content:center;
+      padding:28px 16px;
+      text-align:center;
+      gap:12px;
+    }
+    .logo{
+      width:44px; height:44px; border-radius:12px;
+      background: linear-gradient(135deg, #11b6e6, #1173f0);
+      display:grid; place-items:center;
+      box-shadow: var(--shadow);
+    }
+    .logo span{
+      width:18px; height:18px; border:3px solid white; border-top: none; border-left: none; transform: rotate(45deg);
+      border-radius:3px;
+    }
+    h1{
+      font-weight:700; margin:0;
+      font-size: clamp(20px, 2.6vw, 28px);
+    }
+    .subtle{ color: var(--muted); font-size:14px; margin-top:4px; }
+
+    .wrap{
+      width:100%;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 16px 80px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:16px;
+    }
+    @media (min-width: 980px){
+      .grid{ grid-template-columns: 1.2fr .8fr; }
+    }
+
+    .card{
+      background: linear-gradient(180deg, rgba(13,19,42,.8), rgba(11,16,32,.9));
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(4px);
+    }
+    .card h2{
+      margin:2px 0 14px;
+      font-size:18px;
+      letter-spacing:.2px;
+    }
+
+    .row{
+      display:grid;
+      gap:10px;
+      grid-template-columns: 1fr auto;
+      align-items:start;
+      padding:12px 0;
+      border-bottom: 1px dashed rgba(255,255,255,.08);
+    }
+    .row:last-child{ border-bottom: none; }
+
+    .q{
+      color: var(--ink);
+    }
+    .help{
+      color: var(--muted);
+      font-size: 12px;
+      margin-top:4px;
+    }
+
+    .choices{
+      display:flex;
+      gap:8px;
+    }
+    .btn{
+      appearance:none; border:1px solid rgba(255,255,255,.12);
+      background: #121a2a;
+      color: var(--ink);
+      padding:8px 10px;
+      border-radius:10px;
+      cursor:pointer;
+      font-weight:600; font-size:14px;
+      transition: .18s ease;
+    }
+    .btn:hover{ transform: translateY(-1px); }
+    .btn:focus{ outline:none; box-shadow: var(--ring); }
+    .btn.on{
+      background: linear-gradient(180deg, rgba(97,175,254,.22), rgba(97,175,254,.08));
+      border-color: rgba(97,175,254,.6);
+      color: white;
+    }
+    .btn.no.on{
+      background: linear-gradient(180deg, rgba(255,107,107,.22), rgba(255,107,107,.08));
+      border-color: rgba(255,107,107,.6);
+    }
+
+    .stack{ display:grid; gap:12px; }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid rgba(255,255,255,.12);
+      background:#0f1627;
+      color: var(--ink);
+      padding:10px 12px;
+      border-radius:999px;
+      font-size:13px;
+    }
+    .k{
+      width:8px; height:8px; border-radius:999px; background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(97,175,254,.22);
+    }
+
+    .result{
+      border-radius:14px;
+      padding:14px;
+      background: linear-gradient(180deg, rgba(34,197,94,.15), rgba(34,197,94,.05));
+      border: 1px solid rgba(34,197,94,.45);
+      color: #c6f6d5;
+      font-weight:600;
+    }
+    .result.bad{
+      background: linear-gradient(180deg, rgba(255,107,107,.18), rgba(255,107,107,.06));
+      border-color: rgba(255,107,107,.5);
+      color: #ffd6d6;
+    }
+
+    .bar{
+      height: 10px; width:100%; background: rgba(255,255,255,.08); border-radius:999px; overflow:hidden;
+    }
+    .bar > span{
+      display:block; height:100%; width:0%; background: linear-gradient(90deg, #61affe, #22c55e);
+      transition: width .25s ease;
+    }
+
+    .toolbar{
+      display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between;
+      margin-top:14px;
+    }
+    .tgroup{ display:flex; gap:10px; flex-wrap:wrap; }
+
+    .cta{
+      background: linear-gradient(180deg, #61affe, #3a8fff);
+      border: none; color: white; font-weight:700;
+      padding:10px 14px; border-radius:12px; cursor:pointer;
+      box-shadow: var(--shadow);
+    }
+    .ghost{
+      background: transparent; color: var(--ink);
+      border:1px solid rgba(255,255,255,.18); padding:10px 12px; border-radius:12px; cursor:pointer;
+    }
+
+    footer{
+      padding:24px 16px; text-align:center; color: var(--muted); font-size:13px;
+    }
+    code.inline{ background: rgba(255,255,255,.06); padding:2px 6px; border-radius:6px; }
+
+    .preset{
+      display:flex; gap:8px; flex-wrap:wrap;
+    }
+    .chip{
+      border:1px solid rgba(255,255,255,.16); background:#0f172a; color: var(--ink);
+      border-radius:999px; padding:8px 12px; cursor:pointer; font-size:13px; font-weight:600;
+    }
+    .chip.on{ border-color: rgba(97,175,254,.6); background: rgba(97,175,254,.15); }
   </style>
 </head>
 <body>
-<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
-<p class="p1"><span class="s1">&lt;html lang="en"&gt;</span></p>
-<p class="p1"><span class="s1">&lt;head&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta charset="utf-8" /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta name="viewport" content="width=device-width, initial-scale=1" /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;title&gt;License Matrix&lt;/title&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;meta name="description" content="Decision matrix to determine Business (desktop) vs. Basic/Web licenses." /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;style&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>:root{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--bg:#0b1020;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--card:#121a33;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--muted:#7f8bb3;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--text:#e9eef9;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--accent:#5ac8fa;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--accent-2:#9effa8;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--danger:#ff6b6b;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--ok:#34c759;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--warn:#ffd166;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--border:rgba(255,255,255,0.08);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--shadow:0 10px 30px rgba(0,0,0,0.35);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>--radius:14px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>*{box-sizing:border-box}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>html,body{height:100%}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>body{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>margin:0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>color:var(--text);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background:</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>radial-gradient(1000px 600px at 110% -10%, rgba(90,200,250,0.15), transparent 60%),</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>radial-gradient(900px 500px at -10% 110%, rgba(158,255,168,0.12), transparent 60%),</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>linear-gradient(180deg, #0a0f1d 0%, #0c1226 100%);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>min-height:100%;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>-webkit-font-smoothing:antialiased;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>-moz-osx-font-smoothing:grayscale;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>a{color:var(--accent);text-decoration:none}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>a:hover{text-decoration:underline}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.wrap{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>max-width:980px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>margin:0 auto;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>padding:24px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>header{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display:flex;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>align-items:center;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>gap:14px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>margin-bottom:18px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.logo{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>width:42px;height:42px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border-radius:10px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background: linear-gradient(135deg, var(--accent), #7ad7ff);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display:grid;place-items:center;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>color:#00111a;font-weight:800;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>box-shadow:0 8px 24px rgba(90,200,250,0.35);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>h1{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>font-size: clamp(22px, 3.4vw, 32px);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>margin:0;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>letter-spacing:0.2px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.subtitle{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>color:var(--muted);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>font-size:14px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>margin-top:4px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.card{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background:linear-gradient(180deg, #111936, #0f1730);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border:1px solid var(--border);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border-radius:var(--radius);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>box-shadow:var(--shadow);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>padding:18px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>margin-bottom:16px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.grid{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display:grid;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>grid-template-columns:1fr 1fr;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>gap:14px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>@media (max-width:760px){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>.grid{grid-template-columns:1fr}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>label{display:block;font-weight:600;margin-bottom:6px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.muted{color:var(--muted);font-size:12.5px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>input[type="text"], select, textarea{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>width:100%;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background:#0b1330;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border:1px solid var(--border);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>color:var(--text);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border-radius:10px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>padding:12px 12px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>outline:none;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>transition:border-color .2s, box-shadow .2s, background .2s;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>textarea{min-height:84px;resize:vertical}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>input[type="text"]:focus, select:focus, textarea:focus{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border-color:rgba(90,200,250,0.55);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>box-shadow:0 0 0 3px rgba(90,200,250,0.15);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background:#0d1638;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.q{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>padding:14px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border:1px solid var(--border);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border-radius:12px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.q-title{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>font-weight:600;margin-bottom:8px</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.yn{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display:flex;flex-wrap:wrap;gap:8px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.btn{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>appearance:none;border:0;cursor:pointer;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>padding:11px 14px;border-radius:10px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background:#0f1a3d;color:var(--text);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border:1px solid var(--border);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>transition:transform .02s, background .2s, border-color .2s, color .2s, box-shadow .2s;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>font-weight:600;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.btn:hover{background:#12204f}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.btn:active{transform:translateY(1px)}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.btn.primary{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background: linear-gradient(180deg, #1a2b66, #162558);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border-color: rgba(90,200,250,0.45);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>box-shadow: 0 10px 24px rgba(90,200,250,0.18);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.btn.secondary{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background: #0e183a;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.btn.small{padding:8px 10px;font-size:13px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.yn .btn{flex:1;min-width:110px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.btn.yes{border-color:rgba(52,199,89,0.5)}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.btn.no{border-color:rgba(255,107,107,0.45)}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.btn.selected{outline:3px solid rgba(90,200,250,0.2)}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.result{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>padding:16px;border-radius:12px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border:1px solid var(--border);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display:flex;gap:12px;align-items:flex-start;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.0));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.badge{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display:inline-flex;align-items:center;gap:8px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>padding:8px 12px;border-radius:999px;font-weight:700;font-size:13px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border:1px solid var(--border);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>background:#0f1a3d;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>white-space:nowrap;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.badge.ok{border-color: rgba(52,199,89,0.35); background: rgba(52,199,89,0.12); color:#b8ffd0}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.badge.warn{border-color: rgba(255,209,102,0.35); background: rgba(255,209,102,0.12); color:#fff0c2}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.badge.danger{border-color: rgba(255,107,107,0.35); background: rgba(255,107,107,0.12); color:#ffd7d7}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.row{display:flex;gap:10px;flex-wrap:wrap}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.spacer{height:6px}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.right{margin-left:auto}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.footer{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>margin-top:10px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>color:var(--muted);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>font-size:12px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.split{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display:grid;grid-template-columns:1fr 1fr;gap:14px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>@media (max-width:760px){.split{grid-template-columns:1fr}}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.hidden{display:none}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.pill{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display:inline-block;padding:4px 8px;font-size:12px;border-radius:999px;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>border:1px solid var(--border);color:var(--muted)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.help{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>font-size:12.5px;color:var(--muted);margin-top:6px</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.kpi{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>display:flex;gap:8px;flex-wrap:wrap;margin-top:6px</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>.kpi .pill{background:#0e1633}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/style&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
-<p class="p1"><span class="s1">&lt;body&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div class="wrap"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;header&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="logo" aria-hidden="true"&gt;LM&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;h1&gt;License Matrix&lt;/h1&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="subtitle"&gt;Determine Business (desktop) vs. Basic/Web in minutes. Default is Basic/Web unless a Business trigger applies.&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/header&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;section class="card"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="grid"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;label for="staff"&gt;Staff name or ID&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;input id="staff" type="text" placeholder="e.g., S. Phimmasone or 01234" autocomplete="off" /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;label for="dept"&gt;Department / Project&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;input id="dept" type="text" placeholder="e.g., Finance / Project X" autocomplete="off" /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="grid" style="margin-top:12px"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;label for="role"&gt;Role preset&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;select id="role"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;option value=""&gt;— Select role (optional) —&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;option value="finance"&gt;Finance / Accounting&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;option value="me"&gt;M&amp;E Analyst&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;option value="pm"&gt;Project Manager&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;option value="admin"&gt;Admin / Coordination&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;option value="field"&gt;Field Staff (light usage)&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;option value="it"&gt;IT / Power User&lt;/option&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/select&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="help"&gt;Selecting a preset pre-fills likely answers. Adjust as needed.&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;label for="reviewer"&gt;Reviewer&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;input id="reviewer" type="text" placeholder="Approver or reviewer name" autocomplete="off" /&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;section class="card"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="row" style="align-items:center;justify-content:space-between;margin-bottom:6px"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;strong&gt;Questions&lt;/strong&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="help"&gt;Answer Yes/No. The first Yes among Q1–Q5 triggers Business (desktop). If Q6 is Yes and none of Q1–Q5 are Yes, result is Basic/Web.&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="row"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;button class="btn small secondary" id="resetBtn" title="Clear all fields"&gt;Reset&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;button class="btn small primary" id="autoBtn" title="Auto-decide based on current answers"&gt;Run decision&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="split"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="q" data-q="1"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="q-title"&gt;Q1. Must work offline or with unreliable internet?&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="yn"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn yes" data-val="yes"&gt;Yes&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn no" data-val="no"&gt;No&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="help"&gt;Offline requirement immediately implies Business (desktop).&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="q" data-q="2"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="q-title"&gt;Q2. Requires desktop-only features or integrations?&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="yn"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn yes" data-val="yes"&gt;Yes&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn no" data-val="no"&gt;No&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="help"&gt;Examples: advanced add‑ins, local plugins, complex reporting tools.&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="q" data-q="3"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="q-title"&gt;Q3. Handles large files or performance‑sensitive tasks regularly?&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="yn"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn yes" data-val="yes"&gt;Yes&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn no" data-val="no"&gt;No&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="help"&gt;Heavy spreadsheets, datasets, media, or bulk processing.&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="q" data-q="4"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="q-title"&gt;Q4. Needs advanced document creation/editing beyond web?&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="yn"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn yes" data-val="yes"&gt;Yes&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn no" data-val="no"&gt;No&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="help"&gt;Power formatting, mail‑merge, macros, automation, templates.&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="q" data-q="5"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="q-title"&gt;Q5. Compliance/donor mandates desktop workflows or versions?&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="yn"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn yes" data-val="yes"&gt;Yes&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn no" data-val="no"&gt;No&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="help"&gt;Audit requirements, locked versions, or local storage mandates.&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="q" data-q="6"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="q-title"&gt;Q6. Primarily light, web‑based usage with stable internet?&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="yn"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn yes" data-val="yes"&gt;Yes&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;button class="btn no" data-val="no"&gt;No&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="help"&gt;Email, viewing, basic edits, collaboration; infrequent heavy work.&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;section class="card"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="row" style="align-items:center;justify-content:space-between;margin-bottom:8px"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;strong&gt;Result&lt;/strong&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div class="row"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;button class="btn small secondary" id="copyBtn" title="Copy result summary"&gt;Copy summary&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;button class="btn small primary" id="csvBtn" title="Download decision as CSV"&gt;Download CSV&lt;/button&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div class="result" id="resultBox"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div id="decisionBadge" class="badge warn"&gt;No decision yet&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div id="decisionTitle" style="font-weight:700;margin-bottom:4px"&gt;Answer questions to get a recommendation&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div id="decisionReason" class="muted"&gt;The tool applies the matrix rules and explains the rationale here.&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;div class="kpi"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;span class="pill" id="version"&gt;Matrix v1.0 • 2025‑10‑29&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>&lt;span class="pill" id="completeness"&gt;0/6 answered&lt;/span&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div style="margin-top:12px"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;label for="notes"&gt;Notes / Rationale&lt;/label&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>&lt;textarea id="notes" placeholder="Add context or justification for the decision"&gt;&lt;/textarea&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;section class="footer"&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div&gt;Tip: Default to Basic/Web for cost efficiency; upgrade when a Business trigger (Q1–Q5) is met.&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>&lt;div&gt;This page is client‑side only. No data is sent anywhere.&lt;/div&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/section&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script&gt;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const qs = [...document.querySelectorAll('.q')];</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const answers = { q1:null, q2:null, q3:null, q4:null, q5:null, q6:null };</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const staffEl = document.getElementById('staff');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const deptEl = document.getElementById('dept');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const reviewerEl = document.getElementById('reviewer');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const roleEl = document.getElementById('role');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const notesEl = document.getElementById('notes');</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const decisionBadge = document.getElementById('decisionBadge');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const decisionTitle = document.getElementById('decisionTitle');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const decisionReason = document.getElementById('decisionReason');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const completeness = document.getElementById('completeness');</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const resetBtn = document.getElementById('resetBtn');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const autoBtn = document.getElementById('autoBtn');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const csvBtn = document.getElementById('csvBtn');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const copyBtn = document.getElementById('copyBtn');</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Role presets: pre-fill likely answers and hints</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>const presets = {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>finance: { q1:'no', q2:'yes', q3:'yes', q4:'yes', q5:'sometimes', q6:'no' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>me:<span class="Apple-converted-space">      </span>{ q1:'no', q2:'no',<span class="Apple-converted-space">  </span>q3:'yes', q4:'yes', q5:'no',<span class="Apple-converted-space">        </span>q6:'no' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>pm:<span class="Apple-converted-space">      </span>{ q1:'no', q2:'no',<span class="Apple-converted-space">  </span>q3:'no',<span class="Apple-converted-space">  </span>q4:'yes', q5:'no',<span class="Apple-converted-space">        </span>q6:'no' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>admin: <span class="Apple-converted-space">  </span>{ q1:'no', q2:'no',<span class="Apple-converted-space">  </span>q3:'no',<span class="Apple-converted-space">  </span>q4:'no',<span class="Apple-converted-space">  </span>q5:'no',<span class="Apple-converted-space">        </span>q6:'yes' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>field: <span class="Apple-converted-space">  </span>{ q1:'no', q2:'no',<span class="Apple-converted-space">  </span>q3:'no',<span class="Apple-converted-space">  </span>q4:'no',<span class="Apple-converted-space">  </span>q5:'no',<span class="Apple-converted-space">        </span>q6:'yes' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>it:<span class="Apple-converted-space">      </span>{ q1:'no', q2:'yes', q3:'yes', q4:'yes', q5:'no',<span class="Apple-converted-space">        </span>q6:'no' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>};</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function setAnswer(qIndex, val){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// Map yes/no clicks. Ignore "sometimes" in UI; only in presets to nudge review.</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const key = 'q'+qIndex;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>answers[key] = (val === 'yes' ? 'yes' : 'no');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// Update selected state</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const qEl = document.querySelector(`.q[data-q="${qIndex}"]`);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>qEl.querySelectorAll('.btn.yes, .btn.no').forEach(b=&gt;b.classList.remove('selected'));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>qEl.querySelector(`.btn.${val}`).classList.add('selected');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>decide();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function clearSelections(){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>qs.forEach(q=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>q.querySelectorAll('.btn.yes, .btn.no').forEach(b=&gt;b.classList.remove('selected'));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function applyPreset(key){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if(!key){return}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const p = presets[key];</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// Fill answers</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>Object.entries(p).forEach(([k,v])=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const idx = Number(k.replace('q',''));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const mapped = (v === 'yes' ? 'yes' : 'no'); // treat 'sometimes' as 'no' but we add note</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>answers[k] = mapped;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const qEl = document.querySelector(`.q[data-q="${idx}"]`);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>qEl.querySelectorAll('.btn.yes, .btn.no').forEach(b=&gt;b.classList.remove('selected'));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>qEl.querySelector(`.btn.${mapped}`).classList.add('selected');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// Nudge for 'sometimes' in notes</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (p.q5 === 'sometimes') {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (!notesEl.value.includes('Donor/compliance may apply; verify.')) {</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>notesEl.value = (notesEl.value? notesEl.value.trim() + ' ' : '') + 'Donor/compliance may apply; verify.';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>decide();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Decision logic per matrix:</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// - If any of Q1–Q5 is Yes, recommend Business (desktop). The first Yes provides rationale.</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// - Else if Q6 is Yes, recommend Basic/Web.</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// - Else if incomplete, show pending.</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function decide(){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const completed = Object.values(answers).filter(v=&gt;v==='yes' || v==='no').length;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>completeness.textContent = `${completed}/6 answered`;</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const triggers = [</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>{ key:'q1', label:'Requires offline or unreliable internet' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>{ key:'q2', label:'Needs desktop-only features or integrations' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>{ key:'q3', label:'Handles large files or performance-sensitive tasks' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>{ key:'q4', label:'Advanced editing beyond web capabilities' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>{ key:'q5', label:'Compliance/donor mandates desktop workflows or versions' },</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>];</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const firstYes = triggers.find(t =&gt; answers[t.key] === 'yes');</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (firstYes){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setDecision('Business (desktop)', 'danger',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>`Triggered by ${firstYes.label}. Default to Business; document justification and budget.`)</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (answers.q6 === 'yes' &amp;&amp;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>['q1','q2','q3','q4','q5'].every(k =&gt; answers[k] !== 'yes')){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setDecision('Basic/Web', 'ok',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>'No Business triggers (Q1–Q5) selected and usage is primarily light web-based.')</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// If all answered but no clear signal (e.g., all No incl. Q6), suggest review</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>if (completed === 6){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setDecision('Review needed', 'warn',</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>'No Business triggers and Q6 not confirmed. Verify role duties or run with Basic/Web by default.')</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// Incomplete</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>setDecision('No decision yet', 'warn', 'Answer all questions to receive a recommendation.');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function setDecision(title, style, reason){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>decisionTitle.textContent = title;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>decisionReason.textContent = reason;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>decisionBadge.className = 'badge ' + (style==='ok'?'ok':style==='danger'?'danger':'warn');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>decisionBadge.textContent = title;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function resetAll(){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>staffEl.value = '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>deptEl.value = '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>reviewerEl.value = '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>roleEl.value = '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>notesEl.value = '';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>Object.keys(answers).forEach(k=&gt;answers[k]=null);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>clearSelections();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>decide();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function asCSVRow(){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const now = new Date();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const ts = now.toISOString();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const decision = decisionTitle.textContent;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const fields = [</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['timestamp', ts],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['staff_name', staffEl.value],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['department', deptEl.value],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['role_preset', roleEl.value],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['reviewer', reviewerEl.value],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['q1_offline', answers.q1 ?? ''],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['q2_desktop_features', answers.q2 ?? ''],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['q3_large_files', answers.q3 ?? ''],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['q4_power_editing', answers.q4 ?? ''],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['q5_compliance', answers.q5 ?? ''],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['q6_light_web', answers.q6 ?? ''],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['decision', decision],</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>['rationale', notesEl.value.replace(/\n/g, ' ').trim()]</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>];</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const header = fields.map(([k])=&gt;k).join(',');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const row = fields.map(([,v])=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const s = String(v ?? '');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Escape CSV</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (s.includes('"') || s.includes(',') || s.includes('\n')){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>return '"' + s.replace(/"/g,'""') + '"';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>return s;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}).join(',');</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>return { header, row };</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function downloadCSV(){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const { header, row } = asCSVRow();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const csv = header + '\n' + row + '\n';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const blob = new Blob([csv], { type:'text/csv;charset=utf-8;' });</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const a = document.createElement('a');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>a.href = URL.createObjectURL(blob);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const staff = (staffEl.value || 'unknown').replace(/\s+/g,'_');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>a.download = `license-matrix_${staff}_${new Date().toISOString().slice(0,10)}.csv`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>document.body.appendChild(a);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>a.click();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>a.remove();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function copySummary(){</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const { row } = asCSVRow();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const decision = decisionTitle.textContent;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const reason = decisionReason.textContent;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const summary =</span></p>
-<p class="p1"><span class="s1">`License Matrix decision</span></p>
-<p class="p1"><span class="s1">- Staff: ${staffEl.value || '-'}</span></p>
-<p class="p1"><span class="s1">- Department/Project: ${deptEl.value || '-'}</span></p>
-<p class="p1"><span class="s1">- Role preset: ${roleEl.value || '-'}</span></p>
-<p class="p1"><span class="s1">- Reviewer: ${reviewerEl.value || '-'}</span></p>
-<p class="p1"><span class="s1">- Answers: Q1=${answers.q1||'-'}, Q2=${answers.q2||'-'}, Q3=${answers.q3||'-'}, Q4=${answers.q4||'-'}, Q5=${answers.q5||'-'}, Q6=${answers.q6||'-'}</span></p>
-<p class="p1"><span class="s1">- Decision: ${decision}</span></p>
-<p class="p1"><span class="s1">- Rationale: ${notesEl.value ? notesEl.value.trim() : reason}</span></p>
-<p class="p1"><span class="s1">- Timestamp: ${new Date().toLocaleString()}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1">CSV row:</span></p>
-<p class="p1"><span class="s1">${row}`;</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>navigator.clipboard.writeText(summary).then(()=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>copyBtn.textContent = 'Copied!';</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>setTimeout(()=&gt;copyBtn.textContent='Copy summary', 1200);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}).catch(()=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>alert('Unable to copy to clipboard. Your browser may block it.');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Event wiring</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>qs.forEach(q=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const idx = q.getAttribute('data-q');</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>q.querySelectorAll('.btn.yes, .btn.no').forEach(btn=&gt;{</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>btn.addEventListener('click', ()=&gt; setAnswer(idx, btn.classList.contains('yes') ? 'yes' : 'no'));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>});</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>});</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>roleEl.addEventListener('change', e =&gt; applyPreset(e.target.value));</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>resetBtn.addEventListener('click', resetAll);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>autoBtn.addEventListener('click', decide);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>csvBtn.addEventListener('click', downloadCSV);</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>copyBtn.addEventListener('click', copySummary);</span></p>
-<p class="p2"><span class="s1"></span><br></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>// Initialize</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>decide();</span></p>
-<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
-<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+  <header>
+    <div class="logo" aria-hidden="true"><span></span></div>
+    <div>
+      <h1>License Decision Matrix</h1>
+      <div class="subtle">Determine when a Business (desktop) license is required vs. Basic/Web use.</div>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="grid">
+      <section class="card">
+        <h2>Questions</h2>
+
+        <div class="stack" id="questions"></div>
+
+        <div class="toolbar">
+          <div class="tgroup preset" id="presets"></div>
+          <div class="tgroup">
+            <button class="ghost" id="resetBtn">Reset</button>
+            <button class="cta" id="copyBtn">Copy summary</button>
+            <button class="ghost" id="csvBtn">Download CSV</button>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <h2>Summary</h2>
+
+        <div class="pill" style="margin-bottom:10px;">
+          <span class="k" id="kDot"></span>
+          <span id="scoreText">Score: 0 / 10</span>
+        </div>
+
+        <div class="bar"><span id="barFill" style="width:0%"></span></div>
+
+        <div id="result" class="result" style="margin-top:12px;">
+          Answer the questions to see the suggested license type.
+        </div>
+
+        <div style="margin-top:12px" class="subtle">
+          Tip: Blue = “Yes” increases the likelihood of a Business license. Red “No” selections decrease it.
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer>
+    Matrix v1.0 • Static site. No data is stored or sent. Edit the file <code class="inline">index.html</code> to customize.
+  </footer>
+
+  <script>
+    // Configuration: questions and weights
+    const QUESTIONS = [
+      { id:'team_size', text:'Will more than one person use the app concurrently or via shared credentials?', weight:1.2, help:'Business licenses are typically needed for multi-user or team access.' },
+      { id:'revenue', text:'Is the usage tied to revenue-generating work (sales, proposals, client deliverables)?', weight:1.1, help:'Commercial outputs and billable work lean toward Business licensing.' },
+      { id:'distribution', text:'Will the outputs be distributed externally (clients, partners, the public)?', weight:1.0, help:'External distribution often requires broader licensing.' },
+      { id:'automation', text:'Will the tool be integrated in automated workflows or internal apps?', weight:0.9, help:'Automation or embedding can require expanded rights.' },
+      { id:'scale', text:'Do you expect high-volume usage (daily or scripted runs)?', weight:0.8, help:'Sustained or automated scale suggests Business usage.' },
+      { id:'sensitive', text:'Will you process confidential, regulated, or personal data?', weight:0.9, help:'Business plans typically include stronger compliance options.' },
+      { id:'branding', text:'Will outputs be customer-facing with your branding (web, marketing, sales)?', weight:0.8, help:'Public-facing use tends to need Business licensing.' },
+      { id:'resale', text:'Are outputs resold, packaged, or included in products for customers?', weight:1.2, help:'Resale or embedding in products is a strong Business indicator.' },
+      { id:'desktop', text:'Do you need native desktop features or offline use?', weight:0.6, help:'Desktop features map to Business (desktop) licenses.' },
+      { id:'support', text:'Do you need SLAs, admin controls, or enterprise support?', weight:0.5, help:'Support/administration needs are part of Business offerings.' },
+    ];
+
+    const PRESETS = [
+      { name:'Individual', on:['branding'], off:['team_size','automation','resale'] },
+      { name:'Sales/BD', on:['revenue','distribution','branding'], off:[] },
+      { name:'Marketing', on:['branding','distribution'], off:['desktop'] },
+      { name:'Engineering', on:['automation','scale'], off:[] },
+      { name:'Compliance', on:['sensitive','support'], off:[] },
+    ];
+
+    // State
+    const state = { answers: Object.fromEntries(QUESTIONS.map(q => [q.id, null])) };
+
+    // DOM helpers
+    const el = (sel) => document.querySelector(sel);
+    const c = (tag, cls) => {
+      const e = document.createElement(tag);
+      if (cls) e.className = cls;
+      return e;
+    };
+
+    // Render questions
+    function renderQuestions(){
+      const host = el('#questions');
+      host.innerHTML = '';
+      QUESTIONS.forEach(q => {
+        const row = c('div','row');
+
+        const left = c('div');
+        const title = c('div','q'); title.textContent = q.text;
+        const help = c('div','help'); help.textContent = q.help;
+        left.append(title, help);
+
+        const right = c('div','choices');
+        const yes = c('button','btn yes'); yes.textContent = 'Yes';
+        const no  = c('button','btn no');  no.textContent  = 'No';
+
+        yes.addEventListener('click', () => setAnswer(q.id, true, yes, no));
+        no.addEventListener('click',  () => setAnswer(q.id, false, yes, no));
+
+        right.append(yes, no);
+        row.append(left, right);
+        host.append(row);
+      });
+    }
+
+    function setAnswer(id, val, yesBtn, noBtn){
+      state.answers[id] = val;
+      // toggle styles
+      yesBtn.classList.toggle('on', val === true);
+      noBtn.classList.toggle('on', val === false);
+      updateSummary();
+    }
+
+    // Summary calc
+    function updateSummary(){
+      const weights = QUESTIONS.map(q => q.weight);
+      const max = weights.reduce((a,b)=>a+b,0);
+      let score = 0;
+
+      QUESTIONS.forEach(q => {
+        const a = state.answers[q.id];
+        if (a === true) score += q.weight;
+        // false adds 0; null ignored
+      });
+
+      const pct = Math.round((score / max) * 100);
+      el('#barFill').style.width = pct + '%';
+      el('#scoreText').textContent = `Score: ${score.toFixed(1)} / ${max.toFixed(1)} (${pct}%)`;
+
+      const res = el('#result');
+      if (pct >= 55){
+        res.classList.remove('bad');
+        res.innerHTML = 'Recommendation: Business (desktop) license is likely required, based on your selections.';
+      } else if (pct >= 35){
+        res.classList.remove('bad');
+        res.innerHTML = 'Recommendation: Borderline. Review use case with your team; Business license may be appropriate.';
+      } else {
+        res.classList.add('bad');
+        res.innerHTML = 'Recommendation: Basic/Web use likely acceptable. Confirm any external distribution or resale plans.';
+      }
+
+      // dot color hue shift
+      const dot = el('#kDot');
+      const hue = 120 * (pct/100); // 0..120
+      dot.style.background = `hsl(${hue}, 85%, 55%)`;
+      dot.style.boxShadow = `0 0 0 3px hsla(${hue}, 85%, 55%, .25)`;
+    }
+
+    // Presets
+    function renderPresets(){
+      const host = el('#presets');
+      PRESETS.forEach(p => {
+        const chip = c('button','chip');
+        chip.textContent = p.name;
+        chip.addEventListener('click', () => {
+          // clear
+          Object.keys(state.answers).forEach(k => state.answers[k] = null);
+          // apply preset
+          p.on.forEach(id => state.answers[id] = true);
+          p.off.forEach(id => state.answers[id] = false);
+          // re-render button states
+          document.querySelectorAll('#questions .row').forEach((row, i) => {
+            const q = QUESTIONS[i];
+            const yes = row.querySelector('.yes');
+            const no  = row.querySelector('.no');
+            yes.classList.toggle('on', state.answers[q.id] === true);
+            no.classList.toggle('on', state.answers[q.id] === false);
+          });
+          // visual toggle
+          document.querySelectorAll('.chip').forEach(n => n.classList.remove('on'));
+          chip.classList.add('on');
+          updateSummary();
+        });
+        host.append(chip);
+      });
+    }
+
+    // Actions
+    el('#resetBtn')?.addEventListener('click', () => {
+      Object.keys(state.answers).forEach(k => state.answers[k] = null);
+      document.querySelectorAll('#questions .row').forEach(row => {
+        row.querySelector('.yes').classList.remove('on');
+        row.querySelector('.no').classList.remove('on');
+      });
+      document.querySelectorAll('.chip').forEach(n => n.classList.remove('on'));
+      updateSummary();
+    });
+
+    el('#copyBtn')?.addEventListener('click', async () => {
+      const txt = buildSummaryText();
+      try{
+        await navigator.clipboard.writeText(txt);
+        flash('Summary copied to clipboard.');
+      }catch{
+        flash('Copy failed. Select and copy manually.');
+      }
+    });
+
+    el('#csvBtn')?.addEventListener('click', () => {
+      const rows = [['Question','Answer','Weight']];
+      QUESTIONS.forEach(q => {
+        const a = state.answers[q.id];
+        rows.push([q.text, a===true?'Yes':a===false?'No':'', q.weight]);
+      });
+      const csv = rows.map(r => r.map(s => `"${String(s).replace(/"/g,'""')}"`).join(',')).join('\n');
+      const blob = new Blob([csv], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'license-matrix.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+    });
+
+    function buildSummaryText(){
+      const weights = QUESTIONS.map(q => q.weight);
+      const max = weights.reduce((a,b)=>a+b,0);
+      let score = 0;
+      QUESTIONS.forEach(q => { if (state.answers[q.id] === true) score += q.weight; });
+      const pct = Math.round((score / max) * 100);
+
+      const lines = [];
+      lines.push('License Decision Matrix Summary');
+      lines.push(`Score: ${score.toFixed(1)} / ${max.toFixed(1)} (${pct}%)`);
+      lines.push('');
+      QUESTIONS.forEach(q => {
+        const a = state.answers[q.id];
+        lines.push(`- ${q.text}: ${a===true?'Yes':a===false?'No':'(not answered)'} [w=${q.weight}]`);
+      });
+      lines.push('');
+      if (pct >= 55){
+        lines.push('Recommendation: Business (desktop) license likely required.');
+      } else if (pct >= 35){
+        lines.push('Recommendation: Borderline; review with your team.');
+      } else {
+        lines.push('Recommendation: Basic/Web use likely acceptable.');
+      }
+      return lines.join('\n');
+    }
+
+    function flash(msg){
+      const n = document.createElement('div');
+      n.textContent = msg;
+      n.style.position='fixed';
+      n.style.left='50%';
+      n.style.top='20px';
+      n.style.transform='translateX(-50%)';
+      n.style.background='rgba(17,24,39,.95)';
+      n.style.color='white';
+      n.style.padding='10px 14px';
+      n.style.border='1px solid rgba(255,255,255,.15)';
+      n.style.borderRadius='10px';
+      n.style.boxShadow='0 10px 25px rgba(0,0,0,.35)';
+      n.style.zIndex='9999';
+      document.body.appendChild(n);
+      setTimeout(()=>{ n.remove(); }, 1800);
+    }
+
+    // Init
+    renderQuestions();
+    renderPresets();
+    updateSummary();
+  </script>
 </body>
 </html>
